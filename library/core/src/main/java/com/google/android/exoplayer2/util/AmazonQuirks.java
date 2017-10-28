@@ -99,4 +99,12 @@ public final class AmazonQuirks {
         // SDK version and device type again
         return AUDIO_HARDWARE_LATENCY_FOR_TABLETS;
     }
+
+    public static boolean codecNeedsEosPropagationWorkaround(String codecName) {
+        boolean needsWorkaround = isFireTVGen2() && codecName.endsWith(".secure");
+        if (needsWorkaround) {
+            Log.i(TAG, "Codec Needs EOS Propagation Workaround " + codecName);
+        }
+        return needsWorkaround;
+    }
 }
