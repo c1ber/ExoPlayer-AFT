@@ -40,6 +40,7 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
+import com.google.android.exoplayer2.util.AmazonQuirks;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.TraceUtil;
@@ -393,8 +394,8 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
   protected void configureCodec(MediaCodecInfo codecInfo, MediaCodec codec, Format format,
       MediaCrypto crypto) throws DecoderQueryException {
     codecMaxValues = getCodecMaxValues(codecInfo, format, streamFormats);
-    MediaFormat mediaFormat = getMediaFormat(format, codecMaxValues, deviceNeedsAutoFrcWorkaround,
-        tunnelingAudioSessionId);
+    MediaFormat mediaFormat = getMediaFormat(format, codecMaxValues,
+            deviceNeedsAutoFrcWorkaround, codecName, tunnelingAudioSessionId); // AMZN_CHANGE_ONELINE
     if (surface == null) {
       Assertions.checkState(shouldUseDummySurface(codecInfo.secure));
       if (dummySurface == null) {
@@ -807,15 +808,20 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
    */
   @SuppressLint("InlinedApi")
   protected MediaFormat getMediaFormat(Format format, CodecMaxValues codecMaxValues,
-      boolean deviceNeedsAutoFrcWorkaround, int tunnelingAudioSessionId) {
+                                       boolean deviceNeedsAutoFrcWorkaround, String codecName, //AMZN_CHANGE_ONELINE
+                                       int tunnelingAudioSessionId) {
     MediaFormat frameworkMediaFormat = format.getFrameworkMediaFormatV16();
     // Set the maximum adaptive video dimensions.
     frameworkMediaFormat.setInteger(MediaFormat.KEY_MAX_WIDTH, codecMaxValues.width);
     frameworkMediaFormat.setInteger(MediaFormat.KEY_MAX_HEIGHT, codecMaxValues.height);
+
+    // AMZN_CHANGE_BEGIN
     // Set the maximum input size.
-    if (codecMaxValues.inputSize != Format.NO_VALUE) {
+    if (codecMaxValues.inputSize != Format.NO_VALUE &&
+            AmazonQuirks.isMaxInputSizeSupported(codecName, codecMaxValues.inputSize)) {
       frameworkMediaFormat.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, codecMaxValues.inputSize);
     }
+    // AMZN_CHANGE_END
     // Set FRC workaround.
     if (deviceNeedsAutoFrcWorkaround) {
       frameworkMediaFormat.setInteger("auto-frc", 0);
