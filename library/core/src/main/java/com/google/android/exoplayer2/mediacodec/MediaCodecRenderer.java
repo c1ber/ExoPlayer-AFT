@@ -1163,9 +1163,6 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    * @return The mode specifying when the adaptation workaround should be enabled.
    */
   private @AdaptationWorkaroundMode int codecAdaptationWorkaroundMode(String name) {
-    if (TTVWorkaroundUtils.isAllWorkaroundEnabled())
-      return ADAPTATION_WORKAROUND_MODE_ALWAYS;
-
     if (Util.SDK_INT <= 25 && "OMX.Exynos.avc.dec.secure".equals(name)
             && (Util.MODEL.startsWith("SM-T585") || Util.MODEL.startsWith("SM-A510")
             || Util.MODEL.startsWith("SM-A520") || Util.MODEL.startsWith("SM-J700"))) {
@@ -1191,9 +1188,6 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    * @return True if the decoder is known to fail if NAL units are queued before CSD.
    */
   private static boolean codecNeedsDiscardToSpsWorkaround(String name, Format format) {
-    if (TTVWorkaroundUtils.isAllWorkaroundEnabled())
-      return true;
-
     return Util.SDK_INT < 21 && format.initializationData.isEmpty()
         && "OMX.MTK.VIDEO.DECODER.AVC".equals(name);
   }
@@ -1211,8 +1205,8 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    *     propagation incorrectly on the host device. False otherwise.
    */
   private static boolean codecNeedsEosPropagationWorkaround(String name) {
-    if (TTVWorkaroundUtils.isAllWorkaroundEnabled())
-      return true;
+    //if (TTVWorkaroundUtils.isAllWorkaroundEnabled())
+    //  return true;
 
     return AmazonQuirks.codecNeedsEosPropagationWorkaround(name)
             || Util.SDK_INT <= 17 && ("OMX.rk.video_decoder.avc".equals(name)
