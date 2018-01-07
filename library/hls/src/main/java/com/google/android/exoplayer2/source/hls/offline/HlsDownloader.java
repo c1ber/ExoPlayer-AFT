@@ -33,13 +33,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-/**
- * Helper class to download HLS streams.
- *
- * A subset of renditions can be downloaded by selecting them using {@link
- * #selectRepresentations(Object[])}. As key, string form of the rendition's url is used. The urls
- * can be absolute or relative to the master playlist url.
- */
 public final class HlsDownloader extends SegmentDownloader<HlsMasterPlaylist, String> {
 
   /**
