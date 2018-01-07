@@ -52,7 +52,6 @@ public final class MimeTypes {
   public static final String AUDIO_MLAW = BASE_TYPE_AUDIO + "/g711-mlaw";
   public static final String AUDIO_AC3 = BASE_TYPE_AUDIO + "/ac3";
   public static final String AUDIO_E_AC3 = BASE_TYPE_AUDIO + "/eac3";
-  public static final String AUDIO_CUSTOM_EC3 = BASE_TYPE_AUDIO + "/ec3";
   public static final String AUDIO_ATMOS = BASE_TYPE_AUDIO + "/eac3-joc";
   public static final String AUDIO_TRUEHD = BASE_TYPE_AUDIO + "/true-hd";
   public static final String AUDIO_DTS = BASE_TYPE_AUDIO + "/vnd.dts";
@@ -258,7 +257,6 @@ public final class MimeTypes {
     switch (mimeType) {
       case MimeTypes.AUDIO_AC3:
         return C.ENCODING_AC3;
-      case MimeTypes.AUDIO_CUSTOM_EC3: //AMZN_CHANGE_ONELINE + fallthrough!
       case MimeTypes.AUDIO_E_AC3:
       case MimeTypes.AUDIO_ATMOS:
         return C.ENCODING_E_AC3;
