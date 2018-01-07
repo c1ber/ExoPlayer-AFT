@@ -286,7 +286,7 @@ public abstract class SimpleDecoder<I extends DecoderInputBuffer, O extends Outp
    * @param error The unexpected decode error.
    * @return The exception to propagate.
    */
-  protected abstract E createUnexpectedDecodeException(Throwable error);
+  public abstract E createUnexpectedDecodeException(Throwable error);
 
   /**
    * Decodes the {@code inputBuffer} and stores any decoded output in {@code outputBuffer}.
