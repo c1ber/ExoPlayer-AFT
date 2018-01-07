@@ -322,4 +322,9 @@ public interface AudioSink {
    */
   void release();
 
+  //AMZN_CHANGE_BEGIN
+
+  boolean applyDolbyPassthroughQuirk();
+
+  //// AMZN_CHANGE_END
 }
