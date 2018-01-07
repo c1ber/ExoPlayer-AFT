@@ -79,6 +79,11 @@ import java.util.List;
   }
 
   @Override
+  public FfmpegDecoderException createUnexpectedDecodeException(Throwable error) {
+    return new FfmpegDecoderException("Unexpected decode error", error);
+  }
+
+  @Override
   public FfmpegDecoderException decode(DecoderInputBuffer inputBuffer,
       SimpleOutputBuffer outputBuffer, boolean reset) {
     if (reset) {

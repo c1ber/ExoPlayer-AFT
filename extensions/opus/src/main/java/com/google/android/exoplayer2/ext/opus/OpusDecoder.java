@@ -145,6 +145,11 @@ import java.util.List;
   }
 
   @Override
+  public OpusDecoderException createUnexpectedDecodeException(Throwable error) {
+    return new OpusDecoderException("Unexpected decode error", error);
+  }
+
+  @Override
   public OpusDecoderException decode(DecoderInputBuffer inputBuffer,
       SimpleOutputBuffer outputBuffer, boolean reset) {
     if (reset) {

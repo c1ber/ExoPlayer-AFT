@@ -18,7 +18,7 @@ package com.google.android.exoplayer2.ext.vp9;
 /**
  * Thrown when a libvpx decoder error occurs.
  */
-public class VpxDecoderException extends Exception {
+public final class VpxDecoderException extends Exception {
 
   /* package */ VpxDecoderException(String message) {
     super(message);

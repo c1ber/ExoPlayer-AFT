@@ -125,6 +125,11 @@ public class SimpleDecoderAudioRendererTest {
     }
 
     @Override
+    public AudioDecoderException createUnexpectedDecodeException(Throwable error) {
+      return new AudioDecoderException("Unexpected decode error", error);
+    }
+
+    @Override
     protected AudioDecoderException decode(DecoderInputBuffer inputBuffer,
         SimpleOutputBuffer outputBuffer, boolean reset) {
       if (inputBuffer.isEndOfStream()) {

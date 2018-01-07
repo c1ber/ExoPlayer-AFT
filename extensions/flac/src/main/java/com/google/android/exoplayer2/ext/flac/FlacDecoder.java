@@ -80,6 +80,11 @@ import java.util.List;
   }
 
   @Override
+  public FlacDecoderException createUnexpectedDecodeException(Throwable error) {
+    return new FlacDecoderException("Unexpected decode error", error);
+  }
+
+  @Override
   public FlacDecoderException decode(DecoderInputBuffer inputBuffer,
       SimpleOutputBuffer outputBuffer, boolean reset) {
     if (reset) {
