@@ -436,6 +436,12 @@ public final class DefaultAudioSink implements AudioSink {
       bufferSize = specifiedBufferSize;
     } else if (isInputPcm) {
       int minBufferSize = AudioTrack.getMinBufferSize(sampleRate, channelConfig, outputEncoding);
+      if (minBufferSize == ERROR_BAD_VALUE) {
+        // Fallback
+        minBufferSize = AudioTrack.getMinBufferSize(sampleRate,
+                channelConfig,
+                C.ENCODING_PCM_16BIT);
+      }
       Assertions.checkState(minBufferSize != ERROR_BAD_VALUE);
       int multipliedBufferSize = minBufferSize * BUFFER_MULTIPLICATION_FACTOR;
       int minAppBufferSize = (int) durationUsToFrames(MIN_BUFFER_DURATION_US) * outputPcmFrameSize;
