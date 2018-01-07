@@ -33,6 +33,7 @@ import android.view.Surface;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.TTVWorkaroundUtils;
 import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.google.android.exoplayer2.drm.DrmInitData;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
@@ -1076,6 +1077,10 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
    * If true is returned then we fall back to releasing and re-instantiating the codec instead.
    */
   private static boolean codecNeedsSetOutputSurfaceWorkaround(String name) {
+    if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+      return true;
+    }
+
     // Work around https://github.com/google/ExoPlayer/issues/3236,
     // https://github.com/google/ExoPlayer/issues/3355 and
     // https://github.com/google/ExoPlayer/issues/3439.

@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.FormatHolder;
+import com.google.android.exoplayer2.TTVWorkaroundUtils;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.decoder.DecoderInputBuffer;
 import com.google.android.exoplayer2.drm.DrmSession;
@@ -1121,6 +1122,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    * @return True if the decoder is known to fail when flushed.
    */
   private static boolean codecNeedsFlushWorkaround(String name) {
+    if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+      return true;
+    }
+
     return Util.SDK_INT < 18
         || (Util.SDK_INT == 18
         && ("OMX.SEC.avc.dec".equals(name) || "OMX.SEC.avc.dec.secure".equals(name)))
@@ -1184,6 +1189,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    *     propagation incorrectly on the host device. False otherwise.
    */
   private static boolean codecNeedsEosPropagationWorkaround(String name) {
+    //if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+    //  return true;
+    //}
+
     return AmazonQuirks.codecNeedsEosPropagationWorkaround(name)
             || Util.SDK_INT <= 17 && ("OMX.rk.video_decoder.avc".equals(name)
             || "OMX.allwinner.video.decoder.avc".equals(name));
@@ -1203,6 +1212,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    *     buffer with {@link MediaCodec#BUFFER_FLAG_END_OF_STREAM} set. False otherwise.
    */
   private static boolean codecNeedsEosFlushWorkaround(String name) {
+    if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+      return true;
+    }
+
     return (Util.SDK_INT <= 23 && "OMX.google.vorbis.decoder".equals(name))
         || (Util.SDK_INT <= 19 && "hb2000".equals(Util.DEVICE)
             && ("OMX.amlogic.avc.decoder.awesome".equals(name)
@@ -1221,6 +1234,10 @@ public abstract class MediaCodecRenderer extends BaseRenderer {
    * @return True if the decoder may throw an exception after receiving an end-of-stream buffer.
    */
   private static boolean codecNeedsEosOutputExceptionWorkaround(String name) {
+    if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+      return true;
+    }
+
     return Util.SDK_INT == 21 && "OMX.google.aac.decoder".equals(name);
   }
 
