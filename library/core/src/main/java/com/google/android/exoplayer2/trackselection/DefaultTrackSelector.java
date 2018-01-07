@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.trackselection;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -1143,7 +1144,7 @@ public class DefaultTrackSelector extends MappingTrackSelector {
      *     equal. A negative integer if this score is worse than the other.
      */
     @Override
-    public int compareTo(AudioTrackScore other) {
+    public int compareTo(@NonNull AudioTrackScore other) {
       if (this.withinRendererCapabilitiesScore != other.withinRendererCapabilitiesScore) {
         return compareInts(this.withinRendererCapabilitiesScore,
             other.withinRendererCapabilitiesScore);
