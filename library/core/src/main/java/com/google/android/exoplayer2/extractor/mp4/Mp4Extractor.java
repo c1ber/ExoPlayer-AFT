@@ -235,7 +235,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     if (atomSize == Atom.DEFINES_LARGE_SIZE) {
       // Read the large size.
       int headerBytesRemaining = Atom.LONG_HEADER_SIZE - Atom.HEADER_SIZE;
-      input.readFully(atomHeader.data, Atom.HEADER_SIZE, headerBytesRemaining);
+      input.readFully(atomHeader.data, Atom.HEADER_SIZE, headerBytesRemaining, true);
       atomHeaderBytesRead += headerBytesRemaining;
       atomSize = atomHeader.readUnsignedLongToLong();
     } else if (atomSize == Atom.EXTENDS_TO_END_SIZE) {
@@ -290,7 +290,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     long atomEndPosition = input.getPosition() + atomPayloadSize;
     boolean seekRequired = false;
     if (atomData != null) {
-      input.readFully(atomData.data, atomHeaderBytesRead, (int) atomPayloadSize);
+      input.readFully(atomData.data, atomHeaderBytesRead, (int) atomPayloadSize, true);
       if (atomType == Atom.TYPE_ftyp) {
         isQuickTime = processFtypAtom(atomData);
       } else if (!containerAtoms.isEmpty()) {
@@ -299,7 +299,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
     } else {
       // We don't need the data. Skip or seek, depending on how large the atom is.
       if (atomPayloadSize < RELOAD_MINIMUM_SEEK_DISTANCE) {
-        input.skipFully((int) atomPayloadSize);
+        input.skipFully((int) atomPayloadSize, true);
       } else {
         positionHolder.position = input.getPosition() + atomPayloadSize;
         seekRequired = true;
@@ -453,7 +453,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
       positionHolder.position = position;
       return RESULT_SEEK;
     }
-    input.skipFully((int) skipAmount);
+    input.skipFully((int) skipAmount, true);
     if (track.track.nalUnitLengthFieldLength != 0) {
       // Zero the top three bytes of the array that we'll use to decode nal unit lengths, in case
       // they're only 1 or 2 bytes long.
@@ -469,7 +469,7 @@ public final class Mp4Extractor implements Extractor, SeekMap {
       while (sampleBytesWritten < sampleSize) {
         if (sampleCurrentNalBytesRemaining == 0) {
           // Read the NAL length so that we know where we find the next one.
-          input.readFully(nalLength.data, nalUnitLengthFieldLengthDiff, nalUnitLengthFieldLength);
+          input.readFully(nalLength.data, nalUnitLengthFieldLengthDiff, nalUnitLengthFieldLength, true);
           nalLength.setPosition(0);
           sampleCurrentNalBytesRemaining = nalLength.readUnsignedIntToInt();
           // Write a start code for the current NAL unit.
