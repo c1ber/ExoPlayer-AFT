@@ -479,14 +479,14 @@ public final class Mp4Extractor implements Extractor, SeekMap {
           sampleSize += nalUnitLengthFieldLengthDiff;
         } else {
           // Write the payload of the NAL unit.
-          int writtenBytes = trackOutput.sampleData(input, sampleCurrentNalBytesRemaining, false);
+          int writtenBytes = trackOutput.sampleData(input, sampleCurrentNalBytesRemaining, true);
           sampleBytesWritten += writtenBytes;
           sampleCurrentNalBytesRemaining -= writtenBytes;
         }
       }
     } else {
       while (sampleBytesWritten < sampleSize) {
-        int writtenBytes = trackOutput.sampleData(input, sampleSize - sampleBytesWritten, false);
+        int writtenBytes = trackOutput.sampleData(input, sampleSize - sampleBytesWritten, true);
         sampleBytesWritten += writtenBytes;
         sampleCurrentNalBytesRemaining -= writtenBytes;
       }
