@@ -251,7 +251,13 @@ public final class HlsPlaylistParser implements ParsingLoadable.Parser<HlsPlayli
         }
       } else if (line.startsWith(TAG_STREAM_INF)) {
         noClosedCaptions |= line.contains(ATTR_CLOSED_CAPTIONS_NONE);
-        int bitrate = parseIntAttr(line, REGEX_BANDWIDTH);
+        // TTV Fix: Set the default bitrate as the maximum of Integer
+        int bitrate = Integer.MAX_VALUE;
+        try {
+          bitrate = parseIntAttr(line, REGEX_BANDWIDTH);
+        } catch (NumberFormatException e) {
+
+        }
         String averageBandwidthString = parseOptionalStringAttr(line, REGEX_AVERAGE_BANDWIDTH);
         if (averageBandwidthString != null) {
           // If available, the average bandwidth attribute is used as the variant's bitrate.
