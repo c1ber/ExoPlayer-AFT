@@ -28,11 +28,12 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 /**
  * Extracts data from the FLV container format.
  */
-public final class FlvExtractor implements Extractor {
+public final class FlvExtractor implements Extractor, SeekMap {
 
   /**
    * Factory for {@link FlvExtractor} instances.
@@ -51,12 +52,13 @@ public final class FlvExtractor implements Extractor {
    */
   @Retention(RetentionPolicy.SOURCE)
   @IntDef({STATE_READING_FLV_HEADER, STATE_SKIPPING_TO_TAG_HEADER, STATE_READING_TAG_HEADER,
-      STATE_READING_TAG_DATA})
+      STATE_READING_TAG_DATA, STATE_SEEK_FLV})
   private @interface States {}
   private static final int STATE_READING_FLV_HEADER = 1;
   private static final int STATE_SKIPPING_TO_TAG_HEADER = 2;
   private static final int STATE_READING_TAG_HEADER = 3;
   private static final int STATE_READING_TAG_DATA = 4;
+  private static final int STATE_SEEK_FLV = 5;
 
   // Header sizes.
   private static final int FLV_HEADER_SIZE = 9;
@@ -86,6 +88,8 @@ public final class FlvExtractor implements Extractor {
   private boolean outputSeekMap;
   private AudioTagPayloadReader audioReader;
   private VideoTagPayloadReader videoReader;
+  private List<Double> keyFrameTimes;
+  private List<Double> keyFramePositions;
 
   public FlvExtractor() {
     scratch = new ParsableByteArray(4);
@@ -135,7 +139,7 @@ public final class FlvExtractor implements Extractor {
 
   @Override
   public void seek(long position, long timeUs) {
-    state = STATE_READING_FLV_HEADER;
+    state = STATE_SEEK_FLV;
     mediaTagTimestampOffsetUs = C.TIME_UNSET;
     bytesToNextTagHeader = 0;
   }
@@ -166,6 +170,13 @@ public final class FlvExtractor implements Extractor {
         case STATE_READING_TAG_DATA:
           if (readTagData(input)) {
             return RESULT_CONTINUE;
+          }
+          break;
+        case STATE_SEEK_FLV:
+          if (seekPosition.position == 0) {
+            state = STATE_READING_FLV_HEADER;
+          } else {
+            state = STATE_READING_TAG_HEADER;
           }
           break;
         default:
@@ -302,4 +313,33 @@ public final class FlvExtractor implements Extractor {
     }
   }
 
+  @Override
+  public boolean isSeekable() {
+    keyFrameTimes = metadataReader.getKeyFrameTimes();
+    keyFramePositions = metadataReader.getKeyFrameFilePositions();
+
+    return (keyFrameTimes != null) && (keyFramePositions != null) && (keyFramePositions.size() == keyFrameTimes.size());
+  }
+
+  @Override
+  public long getDurationUs() {
+    return 0;
+  }
+
+  @Override
+  public long getPosition(long timeUs) {
+    double timeMs = timeUs / 1000000;
+    if (keyFrameTimes != null && keyFramePositions != null) {
+      for (int i = 0; i < keyFrameTimes.size(); i++) {
+        if (keyFrameTimes.get(i) > timeMs) {
+          int index = i-1;
+          if (i == 0) {
+            index = 0;
+          }
+          return (long)((double)keyFramePositions.get(index));
+        }
+      }
+    }
+    return 0;
+  }
 }
