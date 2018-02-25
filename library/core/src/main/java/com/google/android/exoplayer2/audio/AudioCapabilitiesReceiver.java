@@ -92,7 +92,7 @@ public final class AudioCapabilitiesReceiver {
     Intent stickyIntent = receiver == null ? null
         : context.registerReceiver(receiver, new IntentFilter(AudioManager.ACTION_HDMI_AUDIO_PLUG));
     // AMZN_CHANGE_BEGIN
-    audioCapabilities = AudioCapabilities.getCapabilities(context, stickyIntent);
+   // audioCapabilities = AudioCapabilities.getCapabilities(context, stickyIntent);
     currentHDMIAudioCapabilities = audioCapabilities =
         AudioCapabilities.getCapabilities(context, stickyIntent);
     if (resolver != null && observer != null) {
