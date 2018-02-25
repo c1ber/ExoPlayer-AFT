@@ -25,6 +25,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.util.SparseIntArray;
+
+import com.google.android.exoplayer2.TTVWorkaroundUtils;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
@@ -423,6 +425,10 @@ public final class MediaCodecUtil {
    * @return True if the decoder is known to fail when adapting.
    */
   private static boolean codecNeedsDisableAdaptationWorkaround(String name) {
+    if (TTVWorkaroundUtils.isAllWorkaroundEnabled()) {
+      return true;
+    }
+
     return Util.SDK_INT <= 22
         && (Util.MODEL.equals("ODROID-XU3") || Util.MODEL.equals("Nexus 10"))
         && ("OMX.Exynos.AVC.Decoder".equals(name) || "OMX.Exynos.AVC.Decoder.secure".equals(name));
