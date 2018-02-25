@@ -28,6 +28,13 @@ android {
         // is not part of Android. Remove this when JUnit 4.13 or later is used.
         // See: https://github.com/junit-team/junit4/pull/1187.
         disable 'InvalidPackage'
+
+        // set to true to turn off analysis progress reporting by lint
+        quiet true
+        // if true, stop the gradle build if errors are found
+        abortOnError false
+        // if true, only report errors
+        ignoreWarnings true
     }
 }
 
