@@ -844,7 +844,6 @@ public final class DefaultAudioSink implements AudioSink {
 
     if (drainAudioProcessorsToEndOfStream()) {
       // The audio processors have drained, so drain the underlying audio track.
-      audioTrackUtil.handleEndOfStream(getWrittenFrames());
       // AMZN_CHANGE_BEGIN
       if (applyDolbyPassthroughQuirk()) {
         audioTrack.stop();
