@@ -419,7 +419,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       MediaCrypto crypto) throws DecoderQueryException {
     codecMaxValues = getCodecMaxValues(codecInfo, format, streamFormats);
     MediaFormat mediaFormat = getMediaFormat(format, codecMaxValues, deviceNeedsAutoFrcWorkaround,
-        codecName, tunnelingAudioSessionId);
+        codecInfo.name, tunnelingAudioSessionId);
     if (surface == null) {
       Assertions.checkState(shouldUseDummySurface(codecInfo));
       if (dummySurface == null) {
