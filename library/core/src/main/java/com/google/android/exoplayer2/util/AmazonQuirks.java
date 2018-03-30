@@ -17,6 +17,7 @@
 package com.google.android.exoplayer2.util;
 
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 public final class AmazonQuirks {
@@ -32,6 +33,10 @@ public final class AmazonQuirks {
 
     private static final String DEVICEMODEL  = Build.MODEL;
     private static final String MANUFACTURER = Build.MANUFACTURER;
+
+    // Fire TV Gen2 device has a limitation of max input size for secure AVC content
+    // capped at 2.8 MB
+    private static final int MAX_INPUT_SECURE_AVC_SIZE_FIRETV_GEN2 = (int) (2.8 * 1024 * 1024);
 
     //caching
     private static final boolean isAmazonDevice;
@@ -80,5 +85,14 @@ public final class AmazonQuirks {
 
         Log.i(TAG, "Using default Dolby pass-through decoder");
         return true;
+    }
+
+    public static boolean isMaxInputSizeSupported(String codecName, int inputSize) {
+        boolean isSizeSupported = true;
+        if (isFireTVGen2) {
+            isSizeSupported = TextUtils.isEmpty(codecName) || !codecName.endsWith("AVC.secure") ||
+                    inputSize <= MAX_INPUT_SECURE_AVC_SIZE_FIRETV_GEN2;
+        }
+        return isSizeSupported;
     }
 }
