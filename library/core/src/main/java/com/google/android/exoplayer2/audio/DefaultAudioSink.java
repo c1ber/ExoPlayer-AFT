@@ -342,7 +342,7 @@ public final class DefaultAudioSink implements AudioSink {
     // params because we don't depend on play head position for timestamp
     if (audioTrack.getPlayState() == PLAYSTATE_PLAYING
             && !applyDolbyPassthroughQuirk()) {
-    maybeSampleSyncParams();
+      maybeSampleSyncParams();
     }
 
     // If the device supports it, use the playback timestamp from AudioTrack.getTimestamp.
@@ -848,6 +848,7 @@ public final class DefaultAudioSink implements AudioSink {
       } else {
         audioTrackUtil.handleEndOfStream(getWrittenFrames());
       }
+      // AMZN_CHANGE_END
       bytesUntilNextAvSync = 0;
       handledEndOfStream = true;
     }
