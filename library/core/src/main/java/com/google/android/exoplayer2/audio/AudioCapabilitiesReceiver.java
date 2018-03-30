@@ -123,6 +123,7 @@ public final class AudioCapabilitiesReceiver {
       listener.onAudioCapabilitiesChanged(newAudioCapabilities);
     }
   }
+  // AMZN_CHANGE_END
 
   private final class HdmiAudioPlugBroadcastReceiver extends BroadcastReceiver {
 
