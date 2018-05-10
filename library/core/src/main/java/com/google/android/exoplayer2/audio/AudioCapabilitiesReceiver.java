@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.provider.Settings;
 
 import com.google.android.exoplayer2.util.Assertions;
