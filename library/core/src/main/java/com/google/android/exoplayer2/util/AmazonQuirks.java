@@ -99,6 +99,14 @@ public final class AmazonQuirks {
         return isSizeSupported;
     }
 
+    public static boolean codecNeedsEosPropagationWorkaround(String codecName) {
+        boolean needsWorkaround = isFireTVGen2() && codecName.endsWith(".secure");
+        if (needsWorkaround) {
+            Log.i(TAG, "Codec Needs EOS Propagation Workaround " + codecName);
+        }
+        return needsWorkaround;
+    }
+
     /**
      * To disable snapping the frame release times to VSYNC call this function with true
      * By default, snapping to VSYNC is enabled if this function is not called.
