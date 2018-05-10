@@ -165,7 +165,7 @@ import java.lang.reflect.Method;
     if (Util.SDK_INT >= 18) {
       try {
         getLatencyMethod = AudioTrack.class.getMethod("getLatency", (Class<?>[]) null);
-      } catch (NoSuchMethodException e) {
+      } catch (Throwable e) { //AMZN_CHANGE_ONELINE: Some legacy devices throw unexpected errors
         // There's no guarantee this method exists. Do nothing.
       }
     }

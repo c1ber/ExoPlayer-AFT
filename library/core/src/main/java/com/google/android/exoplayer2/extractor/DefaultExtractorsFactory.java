@@ -65,7 +65,7 @@ public final class DefaultExtractorsFactory implements ExtractorsFactory {
       // LINT.ThenChange(../../../../../../../../proguard-rules.txt)
     } catch (ClassNotFoundException e) {
       // Expected if the app was built without the FLAC extension.
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // The FLAC extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating FLAC extension", e);
     }

@@ -242,7 +242,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
       Log.i(TAG, "Loaded LibvpxVideoRenderer.");
     } catch (ClassNotFoundException e) {
       // Expected if the app was built without the extension.
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // The extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating VP9 extension", e);
     }
@@ -301,7 +301,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
       Log.i(TAG, "Loaded LibopusAudioRenderer.");
     } catch (ClassNotFoundException e) {
       // Expected if the app was built without the extension.
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // The extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating Opus extension", e);
     }
@@ -322,7 +322,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
       Log.i(TAG, "Loaded LibflacAudioRenderer.");
     } catch (ClassNotFoundException e) {
       // Expected if the app was built without the extension.
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // The extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating FLAC extension", e);
     }
@@ -344,7 +344,7 @@ public class DefaultRenderersFactory implements RenderersFactory {
       Log.i(TAG, "Loaded FfmpegAudioRenderer.");
     } catch (ClassNotFoundException e) {
       // Expected if the app was built without the extension.
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // The extension is present, but instantiation failed.
       throw new RuntimeException("Error instantiating FFmpeg extension", e);
     }

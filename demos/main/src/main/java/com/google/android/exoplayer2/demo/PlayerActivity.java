@@ -571,7 +571,7 @@ public class PlayerActivity extends Activity
     } catch (ClassNotFoundException e) {
       // IMA extension not loaded.
       return null;
-    } catch (Exception e) {
+    } catch (Throwable e) {
       throw new RuntimeException(e);
     }
   }

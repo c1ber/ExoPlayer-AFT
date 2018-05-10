@@ -1448,7 +1448,7 @@ public final class Util {
           Class<?> systemProperties = Class.forName("android.os.SystemProperties");
           Method getMethod = systemProperties.getMethod("get", String.class);
           sysDisplaySize = (String) getMethod.invoke(systemProperties, "sys.display-size");
-        } catch (Exception e) {
+        } catch (Throwable e) {
           Log.e(TAG, "Failed to read sys.display-size", e);
         }
         // If we managed to read sys.display-size, attempt to parse it.

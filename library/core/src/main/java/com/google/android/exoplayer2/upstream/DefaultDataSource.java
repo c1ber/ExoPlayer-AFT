@@ -199,7 +199,7 @@ public final class DefaultDataSource implements DataSource {
       } catch (ClassNotFoundException e) {
         // Expected if the app was built without the RTMP extension.
         Log.w(TAG, "Attempting to play RTMP stream without depending on the RTMP extension");
-      } catch (Exception e) {
+      } catch (Throwable e) {
         // The RTMP extension is present, but instantiation failed.
         throw new RuntimeException("Error instantiating RTMP extension", e);
       }

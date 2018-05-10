@@ -173,6 +173,8 @@ public final class CronetEngineWrapper {
         // GMSCore CronetProvider not available.
       } catch (IllegalAccessException e) {
         // GMSCore CronetProvider not available.
+      } catch (Throwable e) {
+        // GMSCore CronetProvider not available.
       }
       gmsCoreCronetName = gmsCoreVersionString;
       this.preferGMSCoreCronet = preferGMSCoreCronet;
