@@ -44,6 +44,8 @@ public final class AmazonQuirks {
     private static final boolean isFireTVStick;
     private static final boolean isFireTVGen2;
 
+    private static boolean isSnappingToVsyncDisabled;
+
     // This static block must be the last
     //INIT ORDERING IS IMPORTANT IN THIS BLOCK!
     static {
@@ -51,6 +53,7 @@ public final class AmazonQuirks {
         isFireTVGen1   = isAmazonDevice && DEVICEMODEL.equalsIgnoreCase(FIRETV_GEN1_DEVICE_MODEL);
         isFireTVGen2   = isAmazonDevice && DEVICEMODEL.equalsIgnoreCase(FIRETV_GEN2_DEVICE_MODEL);
         isFireTVStick  = isAmazonDevice && DEVICEMODEL.equalsIgnoreCase(FIRETV_STICK_DEVICE_MODEL);
+        isSnappingToVsyncDisabled = false;
     }
 
     private AmazonQuirks(){}
@@ -94,5 +97,17 @@ public final class AmazonQuirks {
                     inputSize <= MAX_INPUT_SECURE_AVC_SIZE_FIRETV_GEN2;
         }
         return isSizeSupported;
+    }
+
+    /**
+     * To disable snapping the frame release times to VSYNC call this function with true
+     * By default, snapping to VSYNC is enabled if this function is not called.
+     */
+    public static void disableSnappingToVsync(boolean disable) {
+        isSnappingToVsyncDisabled = disable;
+    }
+
+    public static boolean isSnappingToVsyncDisabled() {
+        return isSnappingToVsyncDisabled;
     }
 }
