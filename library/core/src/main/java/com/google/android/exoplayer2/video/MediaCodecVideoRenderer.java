@@ -45,6 +45,7 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer2.mediacodec.MediaFormatUtil;
+import com.google.android.exoplayer2.util.AmazonQuirks;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.TraceUtil;
@@ -439,7 +440,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       MediaCrypto crypto) throws DecoderQueryException {
     codecMaxValues = getCodecMaxValues(codecInfo, format, getStreamFormats());
     MediaFormat mediaFormat = getMediaFormat(format, codecMaxValues, deviceNeedsAutoFrcWorkaround,
-        tunnelingAudioSessionId);
+        codecInfo.name, tunnelingAudioSessionId);
     if (surface == null) {
       Assertions.checkState(shouldUseDummySurface(codecInfo));
       if (dummySurface == null) {
@@ -937,6 +938,7 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
       Format format,
       CodecMaxValues codecMaxValues,
       boolean deviceNeedsAutoFrcWorkaround,
+      String codecName,
       int tunnelingAudioSessionId) {
     MediaFormat mediaFormat = new MediaFormat();
     // Set format parameters that should always be set.
@@ -951,8 +953,13 @@ public class MediaCodecVideoRenderer extends MediaCodecRenderer {
     // Set codec max values.
     mediaFormat.setInteger(MediaFormat.KEY_MAX_WIDTH, codecMaxValues.width);
     mediaFormat.setInteger(MediaFormat.KEY_MAX_HEIGHT, codecMaxValues.height);
-    MediaFormatUtil.maybeSetInteger(
-        mediaFormat, MediaFormat.KEY_MAX_INPUT_SIZE, codecMaxValues.inputSize);
+    //MediaFormatUtil.maybeSetInteger(
+    //    mediaFormat, MediaFormat.KEY_MAX_INPUT_SIZE, codecMaxValues.inputSize);
+    if (codecMaxValues.inputSize != Format.NO_VALUE
+            && AmazonQuirks.isMaxInputSizeSupported(codecName, codecMaxValues.inputSize)) {
+      mediaFormat.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, codecMaxValues.inputSize);
+    }
+
     // Set codec configuration values.
     if (Util.SDK_INT >= 23) {
       mediaFormat.setInteger(MediaFormat.KEY_PRIORITY, 0 /* realtime priority */);
